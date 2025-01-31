@@ -18,7 +18,7 @@ const getRandomUserAgent = () => userAgents[Math.floor(Math.random() * userAgent
 export async function scrapedJobListing(page: Page) {
   const listOfJobs: { job: string, url: string | undefined, description: string, datePosted: Date, hood: string }[] = [];
   
-  for (let i = 1; i <= 1; i++) { // for looping through all the pages and their job listings
+  for (let i = 1; i <= 20; i++) { // for looping through all the pages and their job listings
       const pageUrl = `https://newyork.craigslist.org/search/jjj#search=1~thumb~${i}~0`; 
       await page.setUserAgent(getRandomUserAgent()); 
       await page.setViewport({ width: 1280, height: 800 });
