@@ -75,24 +75,3 @@ export async function scrapedJobDescription(jobListings:{job:string, url:string 
     
     return jobListings;
 }
-async function main(){
-    const browser: Browser = await puppeteer.launch({
-      headless: false,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-blink-features",
-        "--disable-blink-features=AutomationControlled",
-      ],
-    });
-
-    const page = await browser.newPage();  // returns page object that represents single page in browser
-    // and the page objects provides methods to scrape , screenshot, or interact with data.
-    const jobListings = await scrapedJobListing(page);
-    const updatedJobListings = await scrapedJobDescription(jobListings, page);
-    console.log(updatedJobListings);
-    await randomSleep(3000, 7000);
-    await browser.close();
-}
-
-main();
