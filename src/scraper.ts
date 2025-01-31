@@ -13,47 +13,20 @@ const userAgents = [
 ];
 
 const getRandomUserAgent = () => userAgents[Math.floor(Math.random() * userAgents.length)];
-
-// export async function scrapedJobListing(page:Page) {
-//     const listOfJobs: {job:string, url:string | undefined, description: string, datePosted:Date, hood:string}[] =[];
-//     await randomSleep(2000, 5000); 
-//     await page.goto("https://newyork.craigslist.org/search/sof#search=1~thumb~0~0");
-//     await page.waitForSelector(".result-info", { visible: true, timeout: 5000 }); // defaultis 30 sc but can be customized
-
-//     await page.setUserAgent(getRandomUserAgent()); // Set a random User-Agent
-//     await page.setViewport({ width: 1280, height: 800 }); // Set a realistic viewport size
-//     await randomSleep(1000, 3000); // small delay before extraction
-//     const html = await page.content();
-//     const $ = cheerio.load(html); 
-//     const scrappedJobList = $(".result-info").map((index:number, element:Element) => {
-//         const jobTitleUrlData = $(element).find(".title-blob>a");
-//         const job = $(jobTitleUrlData).text();
-//         const url = $(jobTitleUrlData).attr("href");
-//         const timeElement = $(element).find(".meta > span");
-//         const datePosted = new Date($(timeElement).attr("title"));
-//         const hoodElement = $(element).find(".supertitle");
-//         const hood = $(hoodElement).text();
-//         const cleanHood = hood.trim().replace("(","").replace(")","");
-//         return {job,url, datePosted, hood};
-//     }).get();
-//     listOfJobs.push(...scrappedJobList);
-//     console.log(listOfJobs);
-//     return listOfJobs;
-// }
+// const listOfJobs: { job: string, url: string | undefined, description: string, datePosted: Date, hood: string }[] = [];
 
 export async function scrapedJobListing(page: Page) {
   const listOfJobs: { job: string, url: string | undefined, description: string, datePosted: Date, hood: string }[] = [];
   
-  for (let i = 1; i <= 30; i++) { // Loop through 30 pages
+  for (let i = 1; i <= 1; i++) { // for looping through all the pages and their job listings
       const pageUrl = `https://newyork.craigslist.org/search/jjj#search=1~thumb~${i}~0`; 
-
-      await page.goto(pageUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
-      await randomSleep(2000, 5000); // Avoid bot detection
       await page.setUserAgent(getRandomUserAgent()); 
       await page.setViewport({ width: 1280, height: 800 });
-
+      await page.goto(pageUrl, { waitUntil: "domcontentloaded", timeout: 30000 });
+      await randomSleep(2000, 5000); // Avoid bot detection
+      
       // Wait for the job listing elements
-      await page.waitForSelector(".result-info");
+      await page.waitForSelector(".result-info"); // for race condition
 
       const html = await page.content();
       const $ = cheerio.load(html);
@@ -74,8 +47,8 @@ export async function scrapedJobListing(page: Page) {
       
       console.log(`Page ${i} scraped successfully.`);
   }
-
-  console.log(`Total jobs scraped: ${listOfJobs.length}`);
+  console.log(listOfJobs);
+  // console.log(`Total jobs scraped: ${listOfJobs.length}`);
   return listOfJobs;
 }
 
@@ -98,28 +71,15 @@ export async function scrapedJobDescription(jobListings:{job:string, url:string 
         } else {
             console.warn(`Job listing at index ${i} has no URL.`);
         }
+        console.log(`Job ${i + 1}:`);
+        console.log(`Title: ${jobListings[i].job}`);
+        console.log(`Location: ${jobListings[i].hood}`);
+        console.log(`Posted: ${jobListings[i].datePosted}`);
+        console.log(`Link: ${jobListings[i].url}`);
+        console.log(`Description: ${jobListings[i].description.slice(0, 200)}...`);
+        console.log("---------------------------------------------------");  
     }
-    
+    // console.log(jobListings);
     return jobListings;
 }
-async function main(){
-    const browser: Browser = await puppeteer.launch({
-      headless: false,
-      args: [
-        "--no-sandbox",
-        "--disable-setuid-sandbox",
-        "--disable-blink-features",
-        "--disable-blink-features=AutomationControlled",
-      ],
-    });
 
-    const page = await browser.newPage();  // returns page object that represents single page in browser
-    // and the page objects provides methods to scrape , screenshot, or interact with data.
-    const jobListings = await scrapedJobListing(page);
-    const updatedJobListings = await scrapedJobDescription(jobListings, page);
-    console.log(updatedJobListings);
-    await randomSleep(3000, 7000);
-    await browser.close();
-}
-
-main();
