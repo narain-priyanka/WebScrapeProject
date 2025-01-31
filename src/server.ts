@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // // import express, { Request, Response } from 'express';
 // // import puppeteer from "puppeteer";
 // // import { scrapedJobListing, scrapedJobDescription } from "./scraper";
@@ -87,3 +88,6 @@
 // });
 
 // export { app };
+=======
+
+>>>>>>> origin/master
