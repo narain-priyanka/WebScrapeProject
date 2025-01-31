@@ -14,33 +14,6 @@ const userAgents = [
 
 const getRandomUserAgent = () => userAgents[Math.floor(Math.random() * userAgents.length)];
 
-// export async function scrapedJobListing(page:Page) {
-//     const listOfJobs: {job:string, url:string | undefined, description: string, datePosted:Date, hood:string}[] =[];
-//     await randomSleep(2000, 5000); 
-//     await page.goto("https://newyork.craigslist.org/search/sof#search=1~thumb~0~0");
-//     await page.waitForSelector(".result-info", { visible: true, timeout: 5000 }); // defaultis 30 sc but can be customized
-
-//     await page.setUserAgent(getRandomUserAgent()); // Set a random User-Agent
-//     await page.setViewport({ width: 1280, height: 800 }); // Set a realistic viewport size
-//     await randomSleep(1000, 3000); // small delay before extraction
-//     const html = await page.content();
-//     const $ = cheerio.load(html); 
-//     const scrappedJobList = $(".result-info").map((index:number, element:Element) => {
-//         const jobTitleUrlData = $(element).find(".title-blob>a");
-//         const job = $(jobTitleUrlData).text();
-//         const url = $(jobTitleUrlData).attr("href");
-//         const timeElement = $(element).find(".meta > span");
-//         const datePosted = new Date($(timeElement).attr("title"));
-//         const hoodElement = $(element).find(".supertitle");
-//         const hood = $(hoodElement).text();
-//         const cleanHood = hood.trim().replace("(","").replace(")","");
-//         return {job,url, datePosted, hood};
-//     }).get();
-//     listOfJobs.push(...scrappedJobList);
-//     console.log(listOfJobs);
-//     return listOfJobs;
-// }
-
 export async function scrapedJobListing(page: Page) {
   const listOfJobs: { job: string, url: string | undefined, description: string, datePosted: Date, hood: string }[] = [];
   
