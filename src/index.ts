@@ -19,9 +19,7 @@ app.get("/scrape", async (req: Request, res: Response): Promise<void> => {
         console.log(`Scraped ${jobListings.length} job listings`);
 
         const updatedJobListings = await scrapedJobDescription(jobListings, page);
-        
-        console.log(JSON.stringify(updatedJobListings, null, 2));
-
+        // console.log(JSON.stringify(updatedJobListings, null, 2));
         res.json(updatedJobListings);
     } catch (error) {
         console.error("Error in /scrape:", error);
