@@ -14,6 +14,7 @@ const userAgents = [
 
 const getRandomUserAgent = () => userAgents[Math.floor(Math.random() * userAgents.length)];
 // const listOfJobs: { job: string, url: string | undefined, description: string, datePosted: Date, hood: string }[] = [];
+
 export async function scrapedJobListing(page: Page) {
   const listOfJobs: { job: string, url: string | undefined, description: string, datePosted: Date, hood: string }[] = [];
   
